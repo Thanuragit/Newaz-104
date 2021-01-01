@@ -2,24 +2,24 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "virtualMachines_ARMvm_name": {
-            "defaultValue": "ARMvm",
+        "virtualMachines_vm_name": {
+            "defaultValue": "vm",
             "type": "String"
         },
-        "virtualNetworks_ARMvm_name": {
-            "defaultValue": "ARMvm",
+        "networkInterfaces_vm_name": {
+            "defaultValue": "vm",
             "type": "String"
         },
-        "networkInterfaces_ARMvm_name": {
-            "defaultValue": "ARMvm",
+        "publicIPAddresses_vm_name": {
+            "defaultValue": "vm",
             "type": "String"
         },
-        "publicIPAddresses_ARMvm_name": {
-            "defaultValue": "ARMvm",
+        "virtualNetworks_vnet_name": {
+            "defaultValue": "vnet",
             "type": "String"
         },
-        "networkSecurityGroups_ARMvm_name": {
-            "defaultValue": "ARMvm",
+        "networkSecurityGroups_vm_name": {
+            "defaultValue": "vm",
             "type": "String"
         }
     },
@@ -28,12 +28,12 @@
         {
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2020-05-01",
-            "name": "[parameters('networkSecurityGroups_ARMvm_name')]",
+            "name": "[parameters('networkSecurityGroups_vm_name')]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "securityRules": [
                     {
-                        "name": "[concat(parameters('networkSecurityGroups_ARMvm_name'), '3389')]",
+                        "name": "[concat(parameters('networkSecurityGroups_vm_name'), '3389')]",
                         "properties": {
                             "protocol": "Tcp",
                             "sourcePortRange": "*",
@@ -55,19 +55,19 @@
         {
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2020-05-01",
-            "name": "[parameters('publicIPAddresses_ARMvm_name')]",
+            "name": "[parameters('publicIPAddresses_vm_name')]",
             "location": "[resourceGroup().location]",
             "sku": {
                 "name": "Basic"
             },
             "properties": {
-                "ipAddress": "40.78.8.172",
+                "ipAddress": "52.177.2.250",
                 "publicIPAddressVersion": "IPv4",
                 "publicIPAllocationMethod": "Static",
                 "idleTimeoutInMinutes": 4,
                 "dnsSettings": {
-                    "domainNameLabel": "armvm-24b799",
-                    "fqdn": "armvm-24b799.[resourceGroup().location].cloudapp.azure.com"
+                    "domainNameLabel": "[concat(parameters('publicIPAddresses_vm_name'), '-175c98')]",
+                    "fqdn": "[concat(parameters('publicIPAddresses_vm_name'), '-175c98.[resourceGroup().location].cloudapp.azure.com')]"
                 },
                 "ipTags": []
             }
@@ -75,7 +75,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-05-01",
-            "name": "[parameters('virtualNetworks_ARMvm_name')]",
+            "name": "[parameters('virtualNetworks_vnet_name')]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "addressSpace": {
@@ -85,7 +85,7 @@
                 },
                 "subnets": [
                     {
-                        "name": "[parameters('virtualNetworks_ARMvm_name')]",
+                        "name": "sub1",
                         "properties": {
                             "addressPrefix": "192.168.1.0/24",
                             "delegations": [],
@@ -102,10 +102,10 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2019-07-01",
-            "name": "[parameters('virtualMachines_ARMvm_name')]",
+            "name": "[parameters('virtualMachines_vm_name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_ARMvm_name'))]"
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_vm_name'))]"
             ],
             "properties": {
                 "hardwareProfile": {
@@ -120,7 +120,7 @@
                     },
                     "osDisk": {
                         "osType": "Windows",
-                        "name": "[concat(parameters('virtualMachines_ARMvm_name'), '_disk1_0250f32706c449249c304775f8187fda')]",
+                        "name": "[concat(parameters('virtualMachines_vm_name'), '_disk1_38d2388a17db4caf951a42477828cb98')]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "managedDisk": {
@@ -131,9 +131,9 @@
                     "dataDisks": []
                 },
                 "osProfile": {
-                    "computerName": "[parameters('virtualMachines_ARMvm_name')]",
+                    "computerName": "[parameters('virtualMachines_vm_name')]",
                     "adminUsername": "!admin",
-                    "adminPassword": "Siriryammesara12",
+                    "adminPassword": "Siriyammesara123",
                     "windowsConfiguration": {
                         "provisionVMAgent": true,
                         "enableAutomaticUpdates": true
@@ -144,7 +144,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_ARMvm_name'))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_vm_name'))]"
                         }
                     ]
                 }
@@ -153,9 +153,9 @@
         {
             "type": "Microsoft.Network/networkSecurityGroups/securityRules",
             "apiVersion": "2020-05-01",
-            "name": "[concat(parameters('networkSecurityGroups_ARMvm_name'), '/', parameters('networkSecurityGroups_ARMvm_name'), '3389')]",
+            "name": "[concat(parameters('networkSecurityGroups_vm_name'), '/', parameters('networkSecurityGroups_vm_name'), '3389')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_ARMvm_name'))]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_vm_name'))]"
             ],
             "properties": {
                 "protocol": "Tcp",
@@ -175,9 +175,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2020-05-01",
-            "name": "[concat(parameters('virtualNetworks_ARMvm_name'), '/', parameters('virtualNetworks_ARMvm_name'))]",
+            "name": "[concat(parameters('virtualNetworks_vnet_name'), '/sub1')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_ARMvm_name'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_vnet_name'))]"
             ],
             "properties": {
                 "addressPrefix": "192.168.1.0/24",
@@ -189,25 +189,25 @@
         {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2020-05-01",
-            "name": "[parameters('networkInterfaces_ARMvm_name')]",
+            "name": "[parameters('networkInterfaces_vm_name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_ARMvm_name'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_ARMvm_name'), parameters('virtualNetworks_ARMvm_name'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_ARMvm_name'))]"
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_vm_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_name'), 'sub1')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_vm_name'))]"
             ],
             "properties": {
                 "ipConfigurations": [
                     {
-                        "name": "[parameters('networkInterfaces_ARMvm_name')]",
+                        "name": "[parameters('networkInterfaces_vm_name')]",
                         "properties": {
                             "privateIPAddress": "192.168.1.4",
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_ARMvm_name'))]"
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_vm_name'))]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_ARMvm_name'), parameters('virtualNetworks_ARMvm_name'))]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_name'), 'sub1')]"
                             },
                             "primary": true,
                             "privateIPAddressVersion": "IPv4"
@@ -220,7 +220,7 @@
                 "enableAcceleratedNetworking": false,
                 "enableIPForwarding": false,
                 "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_ARMvm_name'))]"
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_vm_name'))]"
                 }
             }
         }
