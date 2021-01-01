@@ -29,7 +29,8 @@
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2020-05-01",
             "name": "[parameters('networkSecurityGroups_vm_name')]",
-            "tags": "[resourceGroup().location]",
+            "tags": {
+                "armsite": "[resourceGroup().location]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "securityRules": [
@@ -78,7 +79,8 @@
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-05-01",
             "name": "[parameters('virtualNetworks_vnet_name')]",
-            "tags": "[resourceGroup().location]",
+            "tags": {
+                "armsite": "[resourceGroup().location]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "addressSpace": {
