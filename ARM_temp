@@ -58,7 +58,8 @@
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2020-05-01",
             "name": "[parameters('publicIPAddresses_vm_name')]",
-            "tag": "[resourceGroup().location]",
+            "tag": {
+                "armsite": "[resourceGroup().location]",
             "location": "[resourceGroup().location]",
             "sku": {
                 "name": "Basic"
